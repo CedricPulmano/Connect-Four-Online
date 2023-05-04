@@ -193,5 +193,3 @@ export default class Game {
         }
     }
 }
-
-let game = new Game()
