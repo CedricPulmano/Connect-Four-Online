@@ -4,6 +4,9 @@
 
 const Board = () => {
   let positionArray = [[], [], [], [], [], [], []];
+  let temp = "pog";
 
-  return <>{positionArray}</>;
+  return <p>{temp}</p>;
 };
+
+export default Board;
