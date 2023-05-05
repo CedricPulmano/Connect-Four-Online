@@ -1,5 +1,4 @@
 // displays connection ID in the 'Connection' div
-// if it does not show connection ID, then it might have to do with the asynchronous connection
 export function displayConnection(connectionID) {
     const header = document.getElementById("Connection");
     header.textContent = connectionID;
