@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 const Position = () => {
-  const [content, setContent] = useState("blue");
+  const [content, setContent] = useState("white");
 
   return (
     <p>pog</p>

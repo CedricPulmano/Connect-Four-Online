@@ -1,0 +1,28 @@
+.example {
+  display: inline;
+  color: blue;
+  width: 50px;
+}
+
+.column-one {
+}
+
+.column-two {
+}
+
+.column-three {
+}
+
+.column-four {
+}
+
+.column-five {
+}
+
+.column-six {
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(6, 16%);
+}
