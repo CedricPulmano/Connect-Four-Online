@@ -1,7 +1,9 @@
 import "./App.css";
-import Button from "./components/inputFields/InputFields";
 import { displayConnection, addText } from "./scripts/script";
 import { io } from "socket.io-client";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import ConnectionRoom from "./pages/connectionRoom/ConnectionRoom";
+import BoardRoom from "./pages/boardRoom/BoardRoom";
 
 // connects to server at port 8080
 const socket = io("http://localhost:8080");
@@ -18,12 +20,21 @@ socket.on("receive-message", (message) => {
 
 function App() {
     return (
-        <div className="App" id="App">
-            <h1 id="Connection">Hi</h1>
-            <div id="Messages">
-                <h2>Messages</h2>
-            </div>
-            <Button socket={socket} />
+        <div className="app">
+            <BrowserRouter>
+                <div className="nav-links">
+                    <Link to="/" className="nav-link">
+                        Connect to a Room
+                    </Link>
+                    <Link to="/board" className="nav-link">
+                        Go to Board
+                    </Link>
+                </div>
+                <Routes>
+                    <Route path="/" element={<ConnectionRoom socket={socket} socketID={socket.id} />}></Route>
+                    <Route path="/board" element={<BoardRoom />}></Route>
+                </Routes>
+            </BrowserRouter>
         </div>
     );
 }

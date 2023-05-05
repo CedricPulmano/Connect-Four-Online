@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Button = ({ socket }) => {
+const InputFields = ({ socket }) => {
     // sets up and updates the state of the 'room' and 'message' fields as the text input changes
     const [room, setRoom] = useState("");
     const handleRoomChange = (event) => {
@@ -36,4 +36,4 @@ const Button = ({ socket }) => {
     );
 };
 
-export default Button;
+export default InputFields;
