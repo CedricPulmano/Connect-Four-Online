@@ -1,0 +1,27 @@
+.column {
+  height: 200px;
+}
+
+.column-one {
+}
+
+.column-two {
+}
+
+.column-three {
+}
+
+.column-four {
+}
+
+.column-five {
+}
+
+.column-six {
+}
+
+.board {
+  display: grid;
+  width: 75%;
+  grid-template-columns: repeat(6, 16%);
+}
