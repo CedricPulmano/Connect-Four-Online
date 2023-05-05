@@ -1,7 +1,5 @@
-.example {
-  display: inline;
-  color: blue;
-  width: 50px;
+.column {
+  height: 200px;
 }
 
 .column-one {

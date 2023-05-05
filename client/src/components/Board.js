@@ -5,7 +5,7 @@ import "./Board.css";
 // contains no state, just contains 42 positions
 // use map function to render 6x7 Position components
 
-// create 6 arrays, each array being a row
+// create 6 arrays, each array being a column
 
 const Board = () => {
   function createRow() {
@@ -24,12 +24,12 @@ const Board = () => {
 
   return (
     <div className="board">
-      <div className="column-one">{createRow()}</div>
-      <div className="column-two">{createRow()}</div>
-      <div className="column-three">{createRow()}</div>
-      <div className="column-four">{createRow()}</div>
-      <div className="column-five">{createRow()}</div>
-      <div className="column-six">{createRow()}</div>
+      <div className="column-one column">{createRow()}</div>
+      <div className="column-two column">{createRow()}</div>
+      <div className="column-three column">{createRow()}</div>
+      <div className="column-four column">{createRow()}</div>
+      <div className="column-five column">{createRow()}</div>
+      <div className="column-six column">{createRow()}</div>
     </div>
   );
 };

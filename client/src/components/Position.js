@@ -16,7 +16,6 @@ const Position = () => {
     <div className="position-space" style={{ backgroundColor: "blue" }}>
       {/* &nbsp; */}O
     </div>
-    // <div className="position" style={{ backgroundColor: { content } }}></div>
   );
 };
 
