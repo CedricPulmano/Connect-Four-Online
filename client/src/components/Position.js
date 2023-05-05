@@ -5,6 +5,9 @@ const Position = () => {
   const [content, setContent] = useState("blue");
 
   return (
-    <div className="position" style={{ backgroundColor: { content } }}></div>
+    <p>pog</p>
+    // <div className="position" style={{ backgroundColor: { content } }}></div>
   );
 };
+
+export default Position;
