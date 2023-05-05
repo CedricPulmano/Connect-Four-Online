@@ -24,5 +24,6 @@
 
 .board {
   display: grid;
+  width: 75%;
   grid-template-columns: repeat(6, 16%);
 }

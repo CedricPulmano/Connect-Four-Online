@@ -2,10 +2,20 @@
 import { useState } from "react";
 
 const Position = () => {
-  const [content, setContent] = useState("white");
+  const [content, setContent] = useState("blue");
+
+  function playerSelect1() {
+    setContent("yellow");
+  }
+
+  function playerSelect2() {
+    setContent("red");
+  }
 
   return (
-    <p>pog</p>
+    <div className="position-space" style={{ backgroundColor: "blue" }}>
+      {/* &nbsp; */}O
+    </div>
     // <div className="position" style={{ backgroundColor: { content } }}></div>
   );
 };
