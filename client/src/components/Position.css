@@ -1,0 +1,14 @@
+.position-space {
+  height: 10vh;
+  text-align: center;
+  line-height: 10vh;
+  outline: solid;
+}
+
+.piece {
+  width: 45%;
+  height: 85%;
+  border-radius: 50%;
+  margin-left: 28%;
+  margin-top: 4%;
+}
