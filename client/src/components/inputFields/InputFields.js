@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import socket from "../../scripts/socketConnection";
 
-const InputFields = ({ socket, addMessage }) => {
+const InputFields = ({ addMessage }) => {
     // sets up and updates the state of the 'room' and 'message' fields as the text input changes
     const [room, setRoom] = useState("");
     const [message, setMessage] = useState("");

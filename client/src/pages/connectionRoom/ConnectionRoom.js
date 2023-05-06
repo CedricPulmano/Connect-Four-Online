@@ -1,10 +1,11 @@
 import "./ConnectionRoom.css";
 import InputFields from "../../components/inputFields/InputFields";
+import socket from "../../scripts/socketConnection";
 
-const ConnectionRoom = ({ socket, socketID, messages, addMessage }) => {
+const ConnectionRoom = ({ messages, addMessage }) => {
     return (
         <div className="connection-room" id="Connection-Room">
-            <h1 id="Connection">Connected with ID: {socketID}</h1>
+            <h1 id="Connection">Connected with ID: {socket.id}</h1>
             <div id="Messages">
                 <h2>Messages</h2>
                 {messages.map((message, index) => {

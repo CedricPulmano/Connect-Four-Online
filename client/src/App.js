@@ -37,17 +37,7 @@ function App() {
                     </Link>
                 </div>
                 <Routes>
-                    <Route
-                        path="/"
-                        element={
-                            <ConnectionRoom
-                                socket={socket}
-                                socketID={socket.id}
-                                messages={messages}
-                                addMessage={addMessage}
-                            />
-                        }
-                    ></Route>
+                    <Route path="/" element={<ConnectionRoom messages={messages} addMessage={addMessage} />}></Route>
                     <Route path="/board" element={<BoardRoom />}></Route>
                 </Routes>
             </BrowserRouter>
