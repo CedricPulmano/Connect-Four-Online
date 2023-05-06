@@ -1,4 +1,5 @@
 import React from "react";
+import "./NavigationBar.css";
 import { Link } from "react-router-dom";
 
 const NavigationBar = () => {

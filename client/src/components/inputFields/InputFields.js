@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./InputFields.css";
 import socket from "../../scripts/socketConnection";
 
 const InputFields = ({ addMessage }) => {
@@ -32,13 +33,17 @@ const InputFields = ({ addMessage }) => {
 
     return (
         <div>
-            <div className="room">
-                <input type="text" value={room} onChange={handleRoomChange} />
-                <button onClick={joinRoom}>Join a Room</button>
+            <div className="room-input">
+                <input className="input-field" type="text" value={room} onChange={handleRoomChange} />
+                <button className="input-submit" onClick={joinRoom}>
+                    Join a Room
+                </button>
             </div>
-            <div className="message">
-                <input type="text" value={message} onChange={handleMessageChange} />
-                <button onClick={sendMessage}>Send a Message</button>
+            <div className="message-input">
+                <input className="input-field" type="text" value={message} onChange={handleMessageChange} />
+                <button className="input-submit" onClick={sendMessage}>
+                    Send a Message
+                </button>
             </div>
         </div>
     );
