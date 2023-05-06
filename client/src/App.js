@@ -6,12 +6,12 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import ConnectionRoom from "./pages/connectionRoom/ConnectionRoom";
 import BoardRoom from "./pages/boardRoom/BoardRoom";
 
-// when first connecting to server, call displayConnection
-socket.on("connect", () => {
-    displayConnection(`Connection ID: ${socket.id}`);
-});
-
 function App() {
+    // when first connecting to server, call displayConnection
+    socket.on("connect", () => {
+        displayConnection(`Connection ID: ${socket.id}`);
+    });
+
     // when 'receive-message' is emitted, call addText
     socket.on("receive-message", (message) => {
         addMessage(message);

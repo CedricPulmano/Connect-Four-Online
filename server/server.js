@@ -15,9 +15,13 @@ io.on("connection", (socket) => {
         console.log("Joined room:", room);
     });
 
-    // sends message to all sockets that are in the given room
+    // sends message to all sockets that are in the given room (if room has been provided)
     socket.on("send-message", (message, room) => {
-        socket.to(room).emit("receive-message", message);
-        console.log(message);
+        if (room === "") {
+            console.log("RAN HERE");
+            socket.broadcast.emit("receive-message", message);
+        } else {
+            socket.to(room).emit("receive-message", message);
+        }
     });
 });

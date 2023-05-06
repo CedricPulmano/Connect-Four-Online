@@ -9,7 +9,7 @@ const ConnectionRoom = ({ messages, addMessage }) => {
             <div id="Messages">
                 <h2>Messages</h2>
                 {messages.map((message, index) => {
-                    return <h2 key={index}>{message}</h2>;
+                    return <h3 key={index}>{message}</h3>;
                 })}
             </div>
             <InputFields socket={socket} addMessage={addMessage} />

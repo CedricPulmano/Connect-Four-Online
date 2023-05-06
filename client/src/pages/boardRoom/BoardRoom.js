@@ -1,4 +1,5 @@
 import React from "react";
+import "./BoardRoom.css";
 import Board from "../../components/Board";
 
 const BoardRoom = () => {

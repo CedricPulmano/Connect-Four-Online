@@ -19,8 +19,14 @@ const InputFields = ({ addMessage }) => {
 
     // when 'Send Message' button is clicked, sends request to send a message to all sockets in the room
     const sendMessage = () => {
-        socket.emit("send-message", message, room);
-        addMessage(message);
+        let messageToSend = "";
+        if (room === "") {
+            messageToSend = `User ${socket.id} to Everyone: ${message}`;
+        } else {
+            messageToSend = `User ${socket.id} to Room ${room}: ${message}`;
+        }
+        socket.emit("send-message", messageToSend, room);
+        addMessage(messageToSend);
         setMessage("");
     };
 
