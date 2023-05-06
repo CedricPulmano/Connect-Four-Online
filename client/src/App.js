@@ -1,17 +1,12 @@
 import "./App.css";
-import { useState } from "react";
-import { displayConnection } from "./scripts/script";
+import { useState, useEffect } from "react";
 import socket from "./scripts/socketConnection";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import NavigationBar from "./components/navigationBar/NavigationBar";
 import ConnectionRoom from "./pages/connectionRoom/ConnectionRoom";
 import BoardRoom from "./pages/boardRoom/BoardRoom";
 
 function App() {
-    // when first connecting to server, call displayConnection
-    socket.on("connect", () => {
-        displayConnection(`Connection ID: ${socket.id}`);
-    });
-
     // when 'receive-message' is emitted, call addText
     socket.on("receive-message", (message) => {
         addMessage(message);
@@ -25,17 +20,35 @@ function App() {
         setMessages([...messages, message]);
     };
 
+    // waits for socket connection to be established, only rendering main component once connected
+    const [connected, setConnected] = useState(false);
+
+    useEffect(() => {
+        socket.on("connect", () => {
+            console.log("WORKING HERE");
+            setConnected(true);
+        });
+
+        return () => {
+            socket.off("connect");
+        };
+    }, []);
+
+    if (!connected) {
+        return (
+            <div className="app">
+                <BrowserRouter>
+                    <NavigationBar />
+                    <div>Connecting to Server...</div>;
+                </BrowserRouter>
+            </div>
+        );
+    }
+
     return (
         <div className="app">
             <BrowserRouter>
-                <div className="nav-links">
-                    <Link to="/" className="nav-link">
-                        Connect to a Room
-                    </Link>
-                    <Link to="/board" className="nav-link">
-                        Go to Board
-                    </Link>
-                </div>
+                <NavigationBar />
                 <Routes>
                     <Route path="/" element={<ConnectionRoom messages={messages} addMessage={addMessage} />}></Route>
                     <Route path="/board" element={<BoardRoom />}></Route>

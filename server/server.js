@@ -18,7 +18,6 @@ io.on("connection", (socket) => {
     // sends message to all sockets that are in the given room (if room has been provided)
     socket.on("send-message", (message, room) => {
         if (room === "") {
-            console.log("RAN HERE");
             socket.broadcast.emit("receive-message", message);
         } else {
             socket.to(room).emit("receive-message", message);
