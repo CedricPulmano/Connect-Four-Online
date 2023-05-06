@@ -1,5 +1,8 @@
 .column {
-  height: 200px;
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 
 .column-one {
@@ -22,6 +25,7 @@
 
 .board {
   display: grid;
-  width: 75%;
-  grid-template-columns: repeat(6, 16%);
+  width: 60%;
+  grid-template-columns: repeat(6, 16.666%);
+  justify-content: center;
 }
