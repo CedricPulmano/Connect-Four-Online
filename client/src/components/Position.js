@@ -1,8 +1,9 @@
 // square space, fill with red/yellow circle depending on state
 import { useState } from "react";
+import "./Position.css";
 
 const Position = () => {
-  const [content, setContent] = useState("blue");
+  const [content, setContent] = useState("white");
 
   function playerSelect1() {
     setContent("yellow");
@@ -12,9 +13,24 @@ const Position = () => {
     setContent("red");
   }
 
+  function randomizePlayer() {
+    if (content !== "white") {
+      return;
+    }
+    if (Math.random() > 0.5) {
+      playerSelect1();
+    } else {
+      playerSelect2();
+    }
+  }
+
   return (
-    <div className="position-space" style={{ backgroundColor: "blue" }}>
-      {/* &nbsp; */}O
+    <div className="position-space">
+      <div
+        className="piece"
+        style={{ backgroundColor: content }}
+        onClick={randomizePlayer}
+      ></div>
     </div>
   );
 };
