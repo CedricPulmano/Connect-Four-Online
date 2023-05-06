@@ -14,6 +14,9 @@ const Position = () => {
   }
 
   function randomizePlayer() {
+    if (content !== "white") {
+      return;
+    }
     if (Math.random() > 0.5) {
       playerSelect1();
     } else {
