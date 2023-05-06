@@ -1,24 +1,30 @@
 import "./App.css";
-import { displayConnection, addText } from "./scripts/script";
-import { io } from "socket.io-client";
+import { useState } from "react";
+import { displayConnection } from "./scripts/script";
+import socket from "./scripts/socketConnection";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import ConnectionRoom from "./pages/connectionRoom/ConnectionRoom";
 import BoardRoom from "./pages/boardRoom/BoardRoom";
-
-// connects to server at port 8080
-const socket = io("http://localhost:8080");
 
 // when first connecting to server, call displayConnection
 socket.on("connect", () => {
     displayConnection(`Connection ID: ${socket.id}`);
 });
 
-// when 'receive-message' is emitted, call addText
-socket.on("receive-message", (message) => {
-    addText(message, "Messages");
-});
-
 function App() {
+    // when 'receive-message' is emitted, call addText
+    socket.on("receive-message", (message) => {
+        addMessage(message);
+    });
+
+    // keeps track of messages sent
+    const [messages, setMessages] = useState([]);
+
+    // adds new message the the messages state
+    const addMessage = (message) => {
+        setMessages([...messages, message]);
+    };
+
     return (
         <div className="app">
             <BrowserRouter>
@@ -31,7 +37,17 @@ function App() {
                     </Link>
                 </div>
                 <Routes>
-                    <Route path="/" element={<ConnectionRoom socket={socket} socketID={socket.id} />}></Route>
+                    <Route
+                        path="/"
+                        element={
+                            <ConnectionRoom
+                                socket={socket}
+                                socketID={socket.id}
+                                messages={messages}
+                                addMessage={addMessage}
+                            />
+                        }
+                    ></Route>
                     <Route path="/board" element={<BoardRoom />}></Route>
                 </Routes>
             </BrowserRouter>

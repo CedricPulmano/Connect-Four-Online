@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 
-const InputFields = ({ socket }) => {
+const InputFields = ({ socket, addMessage }) => {
     // sets up and updates the state of the 'room' and 'message' fields as the text input changes
     const [room, setRoom] = useState("");
+    const [message, setMessage] = useState("");
     const handleRoomChange = (event) => {
         setRoom(event.target.value);
     };
-    const [message, setMessage] = useState("");
     const handleMessageChange = (event) => {
         setMessage(event.target.value);
     };
@@ -19,6 +19,7 @@ const InputFields = ({ socket }) => {
     // when 'Send Message' button is clicked, sends request to send a message to all sockets in the room
     const sendMessage = () => {
         socket.emit("send-message", message, room);
+        addMessage(message);
         setMessage("");
     };
 
