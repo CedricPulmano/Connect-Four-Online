@@ -17,7 +17,7 @@ function App() {
 
     // adds new message the the messages state
     const addMessage = (message) => {
-        setMessages([...messages, message]);
+        setMessages([...mesvvsages, message]);
     };
 
     // waits for socket connection to be established, only rendering main component once connected
