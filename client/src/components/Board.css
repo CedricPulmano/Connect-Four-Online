@@ -1,31 +1,17 @@
 .column {
-  height: 70vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-}
-
-.column-one {
-}
-
-.column-two {
-}
-
-.column-three {
-}
-
-.column-four {
-}
-
-.column-five {
-}
-
-.column-six {
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
 }
 
 .board {
-  display: grid;
-  width: 60%;
-  grid-template-columns: repeat(6, 16.666%);
-  justify-content: center;
+    display: grid;
+    width: 50%;
+    grid-template-columns: repeat(6, 1fr);
+    justify-content: center;
+}
+
+.game-status {
+    display: block;
 }

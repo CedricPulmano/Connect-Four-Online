@@ -4,6 +4,7 @@
 
 .app {
     text-align: center;
+    height: 100vh;
 }
 
 .nav-link {
@@ -15,10 +16,4 @@
     display: flex;
     justify-content: center;
     gap: 2.5vw;
-}
-
-.board-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 5vh;
 }

@@ -1,24 +1,24 @@
 .position-space {
-  height: 10vh;
-  width: 10vw;
-  text-align: center;
-  line-height: 10vh;
-  outline: solid;
-  background-color: #4977eb;
+    height: 10vh;
+    width: 10vw;
+    text-align: center;
+    line-height: 10vh;
+    outline: solid;
+    background-color: #4977eb;
 }
 
 .piece {
-  width: 45%;
-  height: 85%;
-  border-radius: 50%;
-  margin-left: 26%;
-  margin-top: 1.8%;
-  padding: 0px;
-  cursor: pointer;
-  border: solid;
-  border-width: 0.4vh;
-  border-style: solid;
-  border-color: #779bf7;
+    width: 45%;
+    height: 85%;
+    border-radius: 50%;
+    margin-left: 26%;
+    margin-top: 1.8%;
+    padding: 0px;
+    cursor: pointer;
+    border: solid;
+    border-width: 0.4vw;
+    border-style: solid;
+    border-color: #779bf7;
 }
 
 /* .piece:hover {
