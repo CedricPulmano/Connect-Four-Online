@@ -10,33 +10,36 @@ const socket = io("http://localhost:8080");
 
 // when first connecting to server, call displayConnection
 socket.on("connect", () => {
-    displayConnection(`Connection ID: ${socket.id}`);
+  displayConnection(`Connection ID: ${socket.id}`);
 });
 
 // when 'receive-message' is emitted, call addText
 socket.on("receive-message", (message) => {
-    addText(message, "Messages");
+  addText(message, "Messages");
 });
 
 function App() {
-    return (
-        <div className="app">
-            <BrowserRouter>
-                <div className="nav-links">
-                    <Link to="/" className="nav-link">
-                        Connect to a Room
-                    </Link>
-                    <Link to="/board" className="nav-link">
-                        Go to Board
-                    </Link>
-                </div>
-                <Routes>
-                    <Route path="/" element={<ConnectionRoom socket={socket} socketID={socket.id} />}></Route>
-                    <Route path="/board" element={<BoardRoom />}></Route>
-                </Routes>
-            </BrowserRouter>
+  return (
+    <div className="app">
+      <BrowserRouter>
+        <div className="nav-container">
+          <Link to="/" className="nav-link">
+            Connect to a Room
+          </Link>
+          <Link to="/board" className="nav-link">
+            Go to Board
+          </Link>
         </div>
-    );
+        <Routes>
+          <Route
+            path="/"
+            element={<ConnectionRoom socket={socket} socketID={socket.id} />}
+          ></Route>
+          <Route path="/board" element={<BoardRoom />}></Route>
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
 }
 
 export default App;
