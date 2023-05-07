@@ -1,0 +1,29 @@
+.nav-links {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f2f2f2;
+    padding: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #333;
+    font-size: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    transition: all 0.2s ease-in-out;
+}
+
+.nav-link:hover {
+    background-color: #333;
+    color: #f2f2f2;
+    transform: scale(1.1);
+}
+
+.nav-link:active {
+    transform: scale(0.9);
+    background-color: #f2f2f2;
+    color: #333;
+}

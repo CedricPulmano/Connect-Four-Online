@@ -1,3 +1,7 @@
 .connection-room {
-  text-align: center;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
 }

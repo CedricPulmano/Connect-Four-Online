@@ -1,0 +1,36 @@
+.room-input,
+.message-input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.input-field {
+    padding: 10px;
+    margin-right: 10px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.input-submit {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    transition: all 0.2s ease-in;
+}
+
+.input-submit:hover {
+    background-color: #3e8e41;
+    transition: all 0.2s ease-in;
+}

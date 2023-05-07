@@ -1,15 +1,14 @@
-import React from "react";
 import "./ConnectionRoom.css";
+import Messages from "../../components/messages/Messages";
 import InputFields from "../../components/inputFields/InputFields";
+import socket from "../../scripts/socketConnection";
 
-const ConnectionRoom = ({ socket, socketID }) => {
+const ConnectionRoom = ({ messages, addMessage }) => {
     return (
         <div className="connection-room" id="Connection-Room">
-            <h1 id="Connection">Connected with ID: {socketID}</h1>
-            <div id="Messages">
-                <h2>Messages</h2>
-            </div>
-            <InputFields socket={socket} />
+            <h1 id="Connection">Connected with ID: {socket.id}</h1>
+            <InputFields socket={socket} addMessage={addMessage} />
+            <Messages messages={messages} />
         </div>
     );
 };

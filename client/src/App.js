@@ -1,45 +1,61 @@
 import "./App.css";
-import { displayConnection, addText } from "./scripts/script";
-import { io } from "socket.io-client";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import socket from "./scripts/socketConnection";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import NavigationBar from "./components/navigationBar/NavigationBar";
 import ConnectionRoom from "./pages/connectionRoom/ConnectionRoom";
 import BoardRoom from "./pages/boardRoom/BoardRoom";
 
-// connects to server at port 8080
-const socket = io("http://localhost:8080");
-
-// when first connecting to server, call displayConnection
-socket.on("connect", () => {
-  displayConnection(`Connection ID: ${socket.id}`);
-});
-
-// when 'receive-message' is emitted, call addText
-socket.on("receive-message", (message) => {
-  addText(message, "Messages");
-});
-
 function App() {
-  return (
-    <div className="app">
-      <BrowserRouter>
-        <div className="nav-container">
-          <Link to="/" className="nav-link">
-            Connect to a Room
-          </Link>
-          <Link to="/board" className="nav-link">
-            Go to Board
-          </Link>
+    // when 'receive-message' is emitted, call addText
+    socket.on("receive-message", (message) => {
+        addMessage(message);
+    });
+
+    // keeps track of messages sent
+    const [messages, setMessages] = useState([]);
+
+    // adds new message the the messages state
+    const addMessage = (message) => {
+        setMessages([...messages, message]);
+    };
+
+    // waits for socket connection to be established, only rendering main component once connected
+    const [connected, setConnected] = useState(false);
+
+    useEffect(() => {
+        socket.on("connect", () => {
+            console.log("WORKING HERE");
+            setConnected(true);
+        });
+
+        return () => {
+            socket.off("connect");
+        };
+    }, []);
+
+    if (!connected) {
+        return (
+            <div className="app">
+                <BrowserRouter>
+                    <NavigationBar />
+                    <div>Connecting to Server...</div>;
+                </BrowserRouter>
+            </div>
+        );
+    }
+
+    return (
+        <div className="app">
+            <BrowserRouter>
+                <NavigationBar />
+                <Routes>
+                    <Route path="/" element={<ConnectionRoom messages={messages} addMessage={addMessage} />}></Route>
+                    <Route path="/board" element={<BoardRoom />}></Route>
+                </Routes>
+            </BrowserRouter>
         </div>
-        <Routes>
-          <Route
-            path="/"
-            element={<ConnectionRoom socket={socket} socketID={socket.id} />}
-          ></Route>
-          <Route path="/board" element={<BoardRoom />}></Route>
-        </Routes>
-      </BrowserRouter>
-    </div>
-  );
+    );
 }
 
 export default App;
