@@ -20,12 +20,14 @@ function App() {
         setMessages([...messages, message]);
     };
 
+    const [room, setRoom] = useState("");
+
     // waits for socket connection to be established, only rendering main component once connected
     const [connected, setConnected] = useState(false);
 
+    // when the room is connected to the server, change connection state to true
     useEffect(() => {
         socket.on("connect", () => {
-            console.log("WORKING HERE");
             setConnected(true);
         });
 
@@ -34,6 +36,7 @@ function App() {
         };
     }, []);
 
+    // render laoding page while waiting for server connection
     if (!connected) {
         return (
             <div className="app">
@@ -45,12 +48,18 @@ function App() {
         );
     }
 
+    // render normal page when connected to server
     return (
         <div className="app">
             <BrowserRouter>
                 <NavigationBar />
                 <Routes>
-                    <Route path="/" element={<ConnectionRoom messages={messages} addMessage={addMessage} />}></Route>
+                    <Route
+                        path="/"
+                        element={
+                            <ConnectionRoom messages={messages} room={room} addMessage={addMessage} setRoom={setRoom} />
+                        }
+                    ></Route>
                     <Route path="/board" element={<BoardRoom />}></Route>
                 </Routes>
             </BrowserRouter>

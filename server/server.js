@@ -15,6 +15,12 @@ io.on("connection", (socket) => {
         console.log("Joined room:", room);
     });
 
+    // joins specific socket to given room
+    socket.on("leave-room", (room) => {
+        socket.leave(room);
+        console.log("Left room:", room);
+    });
+
     // sends message to all sockets that are in the given room (if room has been provided)
     socket.on("send-message", (message, room) => {
         if (room === "") {

@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import "./InputFields.css";
 import socket from "../../scripts/socketConnection";
 
-const InputFields = ({ addMessage }) => {
+const InputFields = ({ addMessage, setRoom, room }) => {
     // sets up and updates the state of the 'room' and 'message' fields as the text input changes
-    const [room, setRoom] = useState("");
+    const [roomText, setRoomText] = useState("");
     const [message, setMessage] = useState("");
     const handleRoomChange = (event) => {
-        setRoom(event.target.value);
+        setRoomText(event.target.value);
     };
     const handleMessageChange = (event) => {
         setMessage(event.target.value);
@@ -15,18 +15,20 @@ const InputFields = ({ addMessage }) => {
 
     // when 'Join Room' button is clicked, sends request to join room
     const joinRoom = () => {
-        socket.emit("join-room", room);
+        socket.emit("leave-room", room);
+        setRoom(roomText);
+        socket.emit("join-room", roomText);
     };
 
     // when 'Send Message' button is clicked, sends request to send a message to all sockets in the room
     const sendMessage = () => {
         let messageToSend = "";
-        if (room === "") {
+        if (roomText === "") {
             messageToSend = `User ${socket.id} to Everyone: ${message}`;
         } else {
-            messageToSend = `User ${socket.id} to Room ${room}: ${message}`;
+            messageToSend = `User ${socket.id} to Room ${roomText}: ${message}`;
         }
-        socket.emit("send-message", messageToSend, room);
+        socket.emit("send-message", messageToSend, roomText);
         addMessage(messageToSend);
         setMessage("");
     };
@@ -34,7 +36,7 @@ const InputFields = ({ addMessage }) => {
     return (
         <div>
             <div className="room-input">
-                <input className="input-field" type="text" value={room} onChange={handleRoomChange} />
+                <input className="input-field" type="text" value={roomText} onChange={handleRoomChange} />
                 <button className="input-submit" onClick={joinRoom}>
                     Join a Room
                 </button>
