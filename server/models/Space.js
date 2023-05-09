@@ -1,7 +1,5 @@
 export default class Space {
-    private colour: "red" | "yellow" | "empty";
-
-    constructor(colour: "red" | "yellow" | "empty") {
+    constructor(colour /*: "red" | "yellow" | "empty"*/) {
         this.colour = colour;
     }
 
@@ -9,7 +7,7 @@ export default class Space {
         return this.colour;
     }
 
-    setColour(colour: "red" | "yellow" | "empty") {
+    setColour(colour /*: "red" | "yellow"*/) {
         this.colour = colour;
     }
 }

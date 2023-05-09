@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./InputFields.css";
 import socket from "../../scripts/socketConnection";
 
-const InputFields = ({ addMessage, setRoom, room }) => {
+const InputFields = ({ addMessage, room }) => {
     // sets up and updates the state of the 'room' and 'message' fields as the text input changes
     const [roomText, setRoomText] = useState("");
     const [message, setMessage] = useState("");
@@ -16,8 +16,7 @@ const InputFields = ({ addMessage, setRoom, room }) => {
     // when 'Join Room' button is clicked, sends request to join room
     const joinRoom = () => {
         socket.emit("leave-room", room);
-        setRoom(roomText);
-        socket.emit("join-room", roomText);
+        socket.emit("join-room", roomText, socket.id);
     };
 
     // when 'Send Message' button is clicked, sends request to send a message to all sockets in the room
