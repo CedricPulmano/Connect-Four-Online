@@ -1,11 +1,19 @@
-import Space from "./Space"
+class Space {
+    constructor(colour /*: "red" | "yellow" | "empty"*/) {
+        this.colour = colour;
+    }
 
-export default class Game {
+    getColour() {
+        return this.colour;
+    }
 
-    private WIDTH = 7;
-    private HEIGHT = 6;
+    setColour(colour /*: "red" | "yellow"*/) {
+        this.colour = colour;
+    }
+}
 
-    private board: Space[][]
+
+class Game {
     /*
     *   board[0][5]          board[6][5]
     *        |--------------------|
@@ -25,6 +33,9 @@ export default class Game {
     */
 
     constructor() {
+        this.currentColour = "red";
+        this.WIDTH = 7;
+        this.HEIGHT = 6;
         this.board = []
         for (var i = 0; i < this.WIDTH; i++) {
             this.board[i] = [];
@@ -32,50 +43,42 @@ export default class Game {
                 this.board[i][j] = new Space("empty");
             }
         }
-        // this.addPiece(2, "yellow");
-        // this.addPiece(1, "red")
-        // this.addPiece(2, "yellow");
-        // this.addPiece(3, "yellow");
-        // this.addPiece(3, "red");
-        // this.addPiece(3, "yellow");
-        // this.addPiece(4, "red");
-        // this.addPiece(4, "red");
-        // this.addPiece(4, "red");
-        // this.addPiece(5, "red");
-        // this.addPiece(5, "red");
-        // this.addPiece(5, "red");
-        // this.addPiece(5, "red");
-        // this.addPiece(4, "yellow");
-        // this.addPiece(5, "yellow");
-        // console.log(this.checkWin(3, 2));
-        // this.addPiece(2, "red")
-        this.render()
     }
 
-    addPiece(column: number, colour: "red" | "yellow" | "empty"): number[] {
+    addPiece(column /*: number, // colour: "red" | "yellow" */) /*: [number, number, "red" | "yellow", boolean] false */ {
         if (this.isFull(column)) {
-            throw new Error("Column full");
+            return false;
         } else {
             for (let i = this.HEIGHT - 1; i >= 0; i--) {
                 if (i === 0) {
-                    this.board[column][i].setColour(colour);
-                    return [column, i]
-                } else {
-                    if (this.board[column][i - 1].getColour() !== "empty") {
-                        this.board[column][i].setColour(colour);
-                        return [column, i]
-                    }
+                    let currentColour = this.currentColour;
+                    this.changePlayer();
+                    this.board[column][i].setColour(currentColour);
+                    return [column, i, currentColour, this.checkWin(column, i)];
+                } else if (this.board[column][i - 1].getColour() !== "empty") {
+                    let currentColour = this.currentColour;
+                    this.changePlayer();
+                    this.board[column][i].setColour(currentColour);
+                    return [column, i, currentColour, this.checkWin(column, i)];
                 }
             }
         }
         throw new Error("Should not reach here");
     }
 
-    isFull(column: number): boolean {
+    isFull(column /*: number*/)/*: boolean */{
         return !(this.board[column][this.HEIGHT - 1].getColour() === "empty") 
     }
 
-    checkWin(locX: number, locY: number) {
+    changePlayer() {
+        if (this.currentColour === "red") {
+            this.currentColour = "yellow";
+        } else if (this.currentColour === "yellow") {
+            this.currentColour = "red";
+        }
+    }
+
+    checkWin(locX /*: number */, locY /*: number */) {
         let colour = this.board[locX][locY].getColour();
         if (colour === "empty") {
             return false;
@@ -86,7 +89,7 @@ export default class Game {
                this.checkPosWin(locX, locY, colour);
     }
 
-    checkVerWin(locX: number, locY: number, colour: "red" | "yellow" | "empty"): boolean {
+    checkVerWin(locX /*: number */, locY /*: number */, colour /*: "red" | "yellow" */) /*: boolean */ {
         let counter = 1;
         let i = locY + 1;
         while (i < this.HEIGHT) {
@@ -109,7 +112,7 @@ export default class Game {
         return counter >= 4
     }
 
-    checkHorWin(locX: number, locY: number, colour: "red" | "yellow" | "empty"): boolean {
+    checkHorWin(locX /*: number */, locY /*: number */, colour /*: "red" | "yellow" */) /*: boolean */ {
         let counter = 1;
         let i = locX + 1;
         while (i < this.WIDTH) {
@@ -132,7 +135,7 @@ export default class Game {
         return counter >= 4
     }
 
-    checkNegWin(locX: number, locY: number, colour: "red" | "yellow" | "empty"): boolean {
+    checkNegWin(locX /*: number */, locY /*: number */, colour /*: "red" | "yellow" */) /*: boolean */ {
         let counter = 1;
         let i = locX + 1, j = locY - 1;
         while (i < this.WIDTH && j >= 0) {
@@ -157,7 +160,7 @@ export default class Game {
         return counter >= 4
     }
 
-    checkPosWin(locX: number, locY: number, colour: "red" | "yellow" | "empty"): boolean {
+    checkPosWin(locX /*: number */, locY /*: number */, colour /*: "red" | "yellow" */) /*: boolean */ {
         let counter = 1;
         let i = locX + 1, j = locY + 1;
         while (i < this.WIDTH && j < this.HEIGHT) {
@@ -193,3 +196,5 @@ export default class Game {
         }
     }
 }
+
+// let game = new Game();
