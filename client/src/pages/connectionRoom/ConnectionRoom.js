@@ -14,7 +14,7 @@ const ConnectionRoom = ({ messages, room, joined, addMessage }) => {
                     ? `Successfully joined: ${room}`
                     : `${room} is already full`}
             </h1>
-            <InputFields addMessage={addMessage} room={room} />
+            <InputFields addMessage={addMessage} room={room} joined={joined} />
             <Messages messages={messages} />
         </div>
     );

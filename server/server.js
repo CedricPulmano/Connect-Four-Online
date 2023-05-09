@@ -12,11 +12,13 @@ io.on("connection", (socket) => {
     // joins specific socket to given room if room is not full
     socket.on("join-room", (roomID, socketID) => {
         const room = io.sockets.adapter.rooms.get(roomID);
+        // room is full - do not let client join
         if (room && room.size >= 2) {
             console.log(roomID, "is full");
             io.to(socketID).emit("join-room-result", false, roomID);
             return;
         }
+        // room is not full - let client join
         socket.join(roomID);
         io.to(socketID).emit("join-room-result", true, roomID);
         console.log(`ROOM SIZE OF ${roomID}: ${room ? room.size : 1}`);

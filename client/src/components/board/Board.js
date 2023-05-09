@@ -1,4 +1,4 @@
-import Position from "./Position";
+import Position from "../position/Position";
 import { useState, useRef, useEffect } from "react";
 import "./Board.css";
 
