@@ -19,8 +19,7 @@ io.on("connection", (socket) => {
         }
         socket.join(roomID);
         io.to(socketID).emit("join-room-result", true, roomID);
-        console.log(socketID);
-        console.log(`ROOM SIZE OF ${roomID}: ${room ? room.size : 0}`);
+        console.log(`ROOM SIZE OF ${roomID}: ${room ? room.size : 1}`);
     });
 
     // joins specific socket to given room

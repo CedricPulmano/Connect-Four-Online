@@ -20,16 +20,22 @@ function App() {
         setMessages([...messages, message]);
     };
 
-    // keeps track of current room
-    const [room, setRoom] = useState("Join a Room");
+    // keeps track of current room and if joined
+    // - if room is not set, then the user has not tried to join a room
+    // - if not joined and room is set, then the user tried to join the room, but the room was full
+    // - if joined and room is set, then the user successfully joined the room
+    const [room, setRoom] = useState("");
+    const [joined, setJoined] = useState(false);
 
     // indicates whether joining the room was a success or not
     socket.on("join-room-result", (success, room) => {
         if (!success) {
-            setRoom(`Room ${room} is full!`);
+            setRoom(room);
+            setJoined(false);
             return;
         }
-        setRoom(`Successfully joined: ${room}`);
+        setRoom(room);
+        setJoined(true);
     });
 
     // waits for socket connection to be established, only rendering main component once connected
@@ -66,7 +72,9 @@ function App() {
                 <Routes>
                     <Route
                         path="/"
-                        element={<ConnectionRoom messages={messages} room={room} addMessage={addMessage} />}
+                        element={
+                            <ConnectionRoom messages={messages} room={room} joined={joined} addMessage={addMessage} />
+                        }
                     ></Route>
                     <Route path="/board" element={<BoardRoom />}></Route>
                 </Routes>
