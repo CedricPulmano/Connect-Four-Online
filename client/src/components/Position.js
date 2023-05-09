@@ -1,4 +1,3 @@
-// square space, fill with red/yellow circle depending on state
 import { useState } from "react";
 import "./Position.css";
 

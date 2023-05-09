@@ -3,10 +3,8 @@ import { useState, useRef } from "react";
 import "./Board.css";
 
 // 2d array 6x7 matrix
-// contains no state, just contains 42 positions
 // use map function to render 6x7 Position components
-
-// create 6 arrays, each array being a column
+// each array is a board column
 
 const Board = () => {
   const [board, setBoard] = useState([
@@ -41,6 +39,12 @@ const Board = () => {
     setBoard(changingBoard);
   }
 
+  function updateOpenSlot(columnNumber) {
+    let changingOpenSlot = openSlot.current;
+    changingOpenSlot[columnNumber]++;
+    openSlot.current = changingOpenSlot;
+  }
+
   function updateBoard(columnNumber) {
     // board must be currently playable
     if (!playable) {
@@ -57,6 +61,7 @@ const Board = () => {
 
     const [x, y, color] = addedPosition;
     reRenderBoard(x, y, color);
+    updateBoard(x);
 
     // call checkWin()
     // if game is won, display a popup that states the player won and make Socket show a defeat screen to oponent
@@ -71,7 +76,6 @@ const Board = () => {
     }
   }
 
-  // include event handlers in the board columns
   return (
     <div className="board">
       <div className="column-one column" onClick={() => updateBoard(1)}>
