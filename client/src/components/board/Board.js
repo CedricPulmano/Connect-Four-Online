@@ -7,7 +7,8 @@ import "./Board.css";
 // each array is a board column
 
 const addPiece = (piece) => {
-    return false;
+    return [0, 0, "red", false];
+    // return false;
 };
 
 const Board = () => {
