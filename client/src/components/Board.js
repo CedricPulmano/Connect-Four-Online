@@ -59,13 +59,12 @@ const Board = () => {
     // if addPiece does not work, do not update the board and exit the function
     // if addPiece does work, update the board and continue with this function
     // !!! IMPORT MALCOLM's FUNCTIONS
-    const addedPosition = [0, 0, "yellow"]; //addPiece(columnNumber); !!!
-    console.log("start event function");
+    const addedPosition = addPiece(columnNumber);
     if (addedPosition === false) {
       return;
     }
 
-    const [x, y, color] = addedPosition;
+    const [x, y, color, win] = addedPosition;
     reRenderBoard(x, y, color);
     updateOpenSlot(x);
 
@@ -73,8 +72,7 @@ const Board = () => {
     // if game is won, display a popup that states the player won and make Socket show a defeat screen to oponent
     // if game is not won, use Socket to display the updated Board to oponent and make playable = false
 
-    const gameWon = false; // checkWin(x, y); !!!
-    if (gameWon) {
+    if (win) {
     } else {
       // Person who makes move calls socket.emit(‘make-move’, position, color)
       // Person who receives move calls socket.on(‘make-move’, (position, colour) => { function });
