@@ -1,5 +1,5 @@
 import Position from "./Position";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import "./Board.css";
 
 // 2d array 6x7 matrix
@@ -15,6 +15,8 @@ const Board = () => {
     ["white", "white", "white", "white", "white", "white", "white"],
     ["white", "white", "white", "white", "white", "white", "white"],
   ]);
+
+  const renderedTimes = useRef(0);
 
   const openSlot = useRef([0, 0, 0, 0, 0, 0]);
   const playable = useRef(true); // need to make playable initally true for one user and false for another
@@ -33,8 +35,10 @@ const Board = () => {
     );
   }
 
+  // value of array is address for state, so using a new array re-renders but changing value of original array does not
+  // !!! why is value of state and ref updated before the print statement???? not sure, but
   function reRenderBoard(x, y, color) {
-    let changingBoard = board;
+    let changingBoard = board.slice();
     changingBoard[x][y] = color;
     setBoard(changingBoard);
   }
@@ -47,27 +51,29 @@ const Board = () => {
 
   function updateBoard(columnNumber) {
     // board must be currently playable
-    if (!playable) {
+    if (playable.current === false) {
+      console.log("ended because not playable");
       return;
     }
     // call addPiece()
     // if addPiece does not work, do not update the board and exit the function
     // if addPiece does work, update the board and continue with this function
     // !!! IMPORT MALCOLM's FUNCTIONS
-    const addedPosition = addPiece(columnNumber);
+    const addedPosition = [0, 0, "yellow"]; //addPiece(columnNumber); !!!
+    console.log("start event function");
     if (addedPosition === false) {
       return;
     }
 
     const [x, y, color] = addedPosition;
     reRenderBoard(x, y, color);
-    updateBoard(x);
+    updateOpenSlot(x);
 
     // call checkWin()
     // if game is won, display a popup that states the player won and make Socket show a defeat screen to oponent
     // if game is not won, use Socket to display the updated Board to oponent and make playable = false
 
-    const gameWon = checkWin(x, y);
+    const gameWon = false; // checkWin(x, y); !!!
     if (gameWon) {
     } else {
       // Person who makes move calls socket.emit(‘make-move’, position, color)
@@ -75,6 +81,13 @@ const Board = () => {
       playable.current = false;
     }
   }
+
+  useEffect(() => {
+    console.log("rendered board");
+    console.log(board);
+    renderedTimes.current++;
+    console.log(renderedTimes.current);
+  });
 
   return (
     <div className="board">
