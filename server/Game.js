@@ -66,6 +66,10 @@ class Game {
         throw new Error("Should not reach here");
     }
 
+    getBoard() {
+        return this.board;
+    }
+
     isFull(column /*: number*/)/*: boolean */{
         return !(this.board[column][this.HEIGHT - 1].getColour() === "empty") 
     }
