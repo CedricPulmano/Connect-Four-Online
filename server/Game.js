@@ -12,40 +12,41 @@ class Space {
     }
 }
 
-
 class Game {
     /*
-    *   board[0][5]          board[6][5]
-    *        |--------------------|
-    *        |  |  |  |  |  |  |  |
-    *        |--------------------|
-    *        |  |  |  |  |  |  |  |
-    *        |--------------------|
-    *        |  |  |  |  |  |  |  |
-    *        |--------------------|
-    *        |  |  |  |  |  |  |  |
-    *        |--------------------|
-    *        |  |  |  |  |  |  |  |
-    *        |--------------------|
-    *        |  |  |  |  |  |  |  |
-    *        |--------------------|
-    *   board[0][0]          board[6][0]
-    */
+     *   board[0][5]          board[6][5]
+     *        |--------------------|
+     *        |  |  |  |  |  |  |  |
+     *        |--------------------|
+     *        |  |  |  |  |  |  |  |
+     *        |--------------------|
+     *        |  |  |  |  |  |  |  |
+     *        |--------------------|
+     *        |  |  |  |  |  |  |  |
+     *        |--------------------|
+     *        |  |  |  |  |  |  |  |
+     *        |--------------------|
+     *        |  |  |  |  |  |  |  |
+     *        |--------------------|
+     *   board[0][0]          board[6][0]
+     */
 
     constructor() {
         this.currentColour = "red";
         this.WIDTH = 7;
         this.HEIGHT = 6;
-        this.board = []
+        this.board = [];
         for (var i = 0; i < this.WIDTH; i++) {
             this.board[i] = [];
-            for(var j = 0; j < this.HEIGHT; j++) {
+            for (var j = 0; j < this.HEIGHT; j++) {
                 this.board[i][j] = new Space("empty");
             }
         }
     }
 
-    addPiece(column /*: number, // colour: "red" | "yellow" */) /*: [number, number, "red" | "yellow", boolean] false */ {
+    addPiece(
+        column /*: number, // colour: "red" | "yellow" */
+    ) /*: [number, number, "red" | "yellow", boolean] false */ {
         if (this.isFull(column)) {
             return false;
         } else {
@@ -66,8 +67,8 @@ class Game {
         throw new Error("Should not reach here");
     }
 
-    isFull(column /*: number*/)/*: boolean */{
-        return !(this.board[column][this.HEIGHT - 1].getColour() === "empty") 
+    isFull(column /*: number*/) /*: boolean */ {
+        return !(this.board[column][this.HEIGHT - 1].getColour() === "empty");
     }
 
     changePlayer() {
@@ -83,10 +84,12 @@ class Game {
         if (colour === "empty") {
             return false;
         }
-        return this.checkVerWin(locX, locY, colour) || 
-               this.checkHorWin(locX, locY, colour) || 
-               this.checkNegWin(locX, locY, colour) || 
-               this.checkPosWin(locX, locY, colour);
+        return (
+            this.checkVerWin(locX, locY, colour) ||
+            this.checkHorWin(locX, locY, colour) ||
+            this.checkNegWin(locX, locY, colour) ||
+            this.checkPosWin(locX, locY, colour)
+        );
     }
 
     checkVerWin(locX /*: number */, locY /*: number */, colour /*: "red" | "yellow" */) /*: boolean */ {
@@ -109,7 +112,7 @@ class Game {
                 break;
             }
         }
-        return counter >= 4
+        return counter >= 4;
     }
 
     checkHorWin(locX /*: number */, locY /*: number */, colour /*: "red" | "yellow" */) /*: boolean */ {
@@ -132,12 +135,13 @@ class Game {
                 break;
             }
         }
-        return counter >= 4
+        return counter >= 4;
     }
 
     checkNegWin(locX /*: number */, locY /*: number */, colour /*: "red" | "yellow" */) /*: boolean */ {
         let counter = 1;
-        let i = locX + 1, j = locY - 1;
+        let i = locX + 1,
+            j = locY - 1;
         while (i < this.WIDTH && j >= 0) {
             if (this.board[i][j].getColour() === colour) {
                 counter++;
@@ -147,7 +151,8 @@ class Game {
                 break;
             }
         }
-        let k = locX - 1, l = locY + 1;
+        let k = locX - 1,
+            l = locY + 1;
         while (k >= 0 && l < this.HEIGHT) {
             if (this.board[k][l].getColour() === colour) {
                 counter++;
@@ -157,12 +162,13 @@ class Game {
                 break;
             }
         }
-        return counter >= 4
+        return counter >= 4;
     }
 
     checkPosWin(locX /*: number */, locY /*: number */, colour /*: "red" | "yellow" */) /*: boolean */ {
         let counter = 1;
-        let i = locX + 1, j = locY + 1;
+        let i = locX + 1,
+            j = locY + 1;
         while (i < this.WIDTH && j < this.HEIGHT) {
             if (this.board[i][j].getColour() === colour) {
                 counter++;
@@ -172,7 +178,8 @@ class Game {
                 break;
             }
         }
-        let k = locX - 1, l = locY - 1;
+        let k = locX - 1,
+            l = locY - 1;
         while (k >= 0 && l >= 0) {
             if (this.board[k][l].getColour() === colour) {
                 counter++;
@@ -182,15 +189,15 @@ class Game {
                 break;
             }
         }
-        return counter >= 4
+        return counter >= 4;
     }
 
     render() {
         for (let i = this.HEIGHT - 1; i >= 0; i--) {
             for (let j = 0; j < this.WIDTH; j++) {
-                if (this.board[j][i].getColour() === "empty") process.stdout.write('e ' )
-                else if (this.board[j][i].getColour() === "red") process.stdout.write('r ' )
-                else if (this.board[j][i].getColour() === "yellow") process.stdout.write('y ' )
+                if (this.board[j][i].getColour() === "empty") process.stdout.write("e ");
+                else if (this.board[j][i].getColour() === "red") process.stdout.write("r ");
+                else if (this.board[j][i].getColour() === "yellow") process.stdout.write("y ");
             }
             console.log();
         }

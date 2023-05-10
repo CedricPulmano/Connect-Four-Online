@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import "./InputFields.css";
 import socket from "../../scripts/socketConnection";
 
-const InputFields = ({ addMessage }) => {
+const InputFields = ({ addMessage, room, joined }) => {
     // sets up and updates the state of the 'room' and 'message' fields as the text input changes
-    const [room, setRoom] = useState("");
+    const [newRoom, setNewRoom] = useState("");
     const [message, setMessage] = useState("");
     const handleRoomChange = (event) => {
-        setRoom(event.target.value);
+        setNewRoom(event.target.value);
     };
     const handleMessageChange = (event) => {
         setMessage(event.target.value);
@@ -15,26 +15,33 @@ const InputFields = ({ addMessage }) => {
 
     // when 'Join Room' button is clicked, sends request to join room
     const joinRoom = () => {
-        socket.emit("join-room", room);
+        socket.emit("leave-room", room);
+        socket.emit("join-room", newRoom, socket.id);
     };
 
-    // when 'Send Message' button is clicked, sends request to send a message to all sockets in the room
+    // when 'Send Message' button is clicked, sends request message request
+    // - if Room is not provided, send to everyone
+    // - if Room is provided, send message only if user is joined in that room
     const sendMessage = () => {
         let messageToSend = "";
-        if (room === "") {
+        if (newRoom === "") {
             messageToSend = `User ${socket.id} to Everyone: ${message}`;
+            socket.emit("send-message", messageToSend, newRoom);
+            addMessage(messageToSend);
         } else {
-            messageToSend = `User ${socket.id} to Room ${room}: ${message}`;
+            if (room === newRoom && joined) {
+                messageToSend = `User ${socket.id} to Room ${newRoom}: ${message}`;
+                socket.emit("send-message", messageToSend, newRoom);
+                addMessage(messageToSend);
+            }
         }
-        socket.emit("send-message", messageToSend, room);
-        addMessage(messageToSend);
         setMessage("");
     };
 
     return (
         <div>
             <div className="room-input">
-                <input className="input-field" type="text" value={room} onChange={handleRoomChange} />
+                <input className="input-field" type="text" value={newRoom} onChange={handleRoomChange} />
                 <button className="input-submit" onClick={joinRoom}>
                     Join a Room
                 </button>
