@@ -1,4 +1,5 @@
 import Position from "../position/Position";
+// import socket from "../../scripts/socketConnection";
 import { useState, useRef, useEffect } from "react";
 import "./Board.css";
 
@@ -11,7 +12,9 @@ const addPiece = (piece) => {
     // return false;
 };
 
-const Board = () => {
+const Board = ({ room, joined, playing, turn }) => {
+    // socket.on("receive-move", (x, y, color, win) => {});
+
     // DEBUGGING
     const renderedTimes = useRef(0);
     useEffect(() => {
@@ -76,6 +79,8 @@ const Board = () => {
             return;
         }
 
+        // socket.emit("send-move", room, 0, 0, "red", false);
+
         const [x, y, color, win] = addedPosition;
         reRenderBoard(x, y, color);
         updateOpenSlot(x);
@@ -93,24 +98,35 @@ const Board = () => {
     }
 
     return (
-        <div className="board">
-            <div className="column-one column" onClick={() => updateBoard(0)}>
-                {createRow(board[0])}
-            </div>
-            <div className="column-two column" onClick={() => updateBoard(1)}>
-                {createRow(board[1])}
-            </div>
-            <div className="column-three column" onClick={() => updateBoard(2)}>
-                {createRow(board[2])}
-            </div>
-            <div className="column-four column" onClick={() => updateBoard(3)}>
-                {createRow(board[3])}
-            </div>
-            <div className="column-five column" onClick={() => updateBoard(4)}>
-                {createRow(board[4])}
-            </div>
-            <div className="column-six column" onClick={() => updateBoard(5)}>
-                {createRow(board[5])}
+        <div className="board-container">
+            <h3 className="turn-indicator">
+                {joined
+                    ? playing
+                        ? turn
+                            ? `Playing in Room ${room}. Your Turn.`
+                            : `Playing in Room ${room}. Opponent's Turn.`
+                        : `Joined Room ${room}. Waiting for an opponent...`
+                    : "Join a Room to start playing!"}
+            </h3>
+            <div className="board">
+                <div className="column-one column" onClick={() => updateBoard(0)}>
+                    {createRow(board[0])}
+                </div>
+                <div className="column-two column" onClick={() => updateBoard(1)}>
+                    {createRow(board[1])}
+                </div>
+                <div className="column-three column" onClick={() => updateBoard(2)}>
+                    {createRow(board[2])}
+                </div>
+                <div className="column-four column" onClick={() => updateBoard(3)}>
+                    {createRow(board[3])}
+                </div>
+                <div className="column-five column" onClick={() => updateBoard(4)}>
+                    {createRow(board[4])}
+                </div>
+                <div className="column-six column" onClick={() => updateBoard(5)}>
+                    {createRow(board[5])}
+                </div>
             </div>
         </div>
     );

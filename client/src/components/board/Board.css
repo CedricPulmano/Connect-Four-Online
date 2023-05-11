@@ -1,16 +1,27 @@
-.column {
-  height: 70vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
+.board {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    justify-content: center;
 }
 
-.board {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  justify-content: center;
+.board-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.turn-indicator {
+    margin-bottom: 1vh;
+}
+
+.column {
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
 }
 
 .game-status {
-  display: block;
+    display: block;
 }

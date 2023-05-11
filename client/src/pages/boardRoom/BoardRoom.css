@@ -1,14 +1,13 @@
 .game-page {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .board-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  margin-top: 5vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 2vh;
 }
