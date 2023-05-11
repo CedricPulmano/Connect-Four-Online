@@ -46,6 +46,10 @@ function App() {
         setTurn(goingFirst);
     });
 
+    socket.on("opponent-quit", () => {
+        console.log(`${socket.id} WINS!`);
+    });
+
     /* SERVER CONNECTION */
     // waits for socket connection to be established, only rendering main component once connected
     const [connected, setConnected] = useState(false);

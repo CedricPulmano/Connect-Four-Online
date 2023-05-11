@@ -32,7 +32,6 @@ io.on("connection", (socket) => {
             const playerTwo = players[1 - playerOneIndex];
             io.to(playerOne).emit("start-game", true);
             io.to(playerTwo).emit("start-game", false);
-            console.log(players);
             console.log("Player One:", playerOne);
             console.log("Player Two:", playerTwo);
         }
@@ -41,7 +40,11 @@ io.on("connection", (socket) => {
 
     // joins specific socket to given room
     socket.on("leave-room", (room) => {
+        if (room === "") {
+            return;
+        }
         socket.leave(room);
+        socket.to(room).emit("opponent-quit");
         console.log("Left room:", room);
     });
 
@@ -57,5 +60,22 @@ io.on("connection", (socket) => {
     // updates player when opponent makes a move
     socket.on("send-move", (room, x, y, color, win) => {
         socket.to(room).broadcast.emit("receive-move", (x, y, color, win));
+    });
+
+    socket.on("disconnect", () => {
+        // rooms is a Map, where the keys are all the roomIDs that the disconnector is in
+        const rooms = socket.adapter.rooms;
+
+        console.log(rooms);
+        rooms.forEach((value, room) => {
+            if (room !== socket.id) {
+                console.log("ROOM:", room);
+                console.log("VALUE:", value);
+                // socket.to(room).broadcast.emit("opponent-quit");
+                // console.log("Successfully broadcasted to", room);
+            }
+        });
+
+        console.log(`User ${socket.id} disconnected.`);
     });
 });
