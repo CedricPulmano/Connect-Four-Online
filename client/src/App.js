@@ -24,7 +24,7 @@ function App() {
     /* ROOM */
     // keeps track of current room and if joined
     // - if room is not set, then the user has not tried to join a room
-    // - if not joined and room is set, then the user tried to join the room, but the room was full
+    // - if !joined and room is set, then the user tried to join the room, but the room was full
     // - if joined and room is set, then the user successfully joined the room
     const [room, setRoom] = useState("");
     const [joined, setJoined] = useState(false);
@@ -88,7 +88,13 @@ function App() {
                     <Route
                         path="/"
                         element={
-                            <ConnectionRoom messages={messages} addMessage={addMessage} room={room} joined={joined} />
+                            <ConnectionRoom
+                                messages={messages}
+                                addMessage={addMessage}
+                                room={room}
+                                joined={joined}
+                                setPlaying={setPlaying}
+                            />
                         }
                     ></Route>
                     <Route

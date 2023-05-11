@@ -44,6 +44,7 @@ io.on("connection", (socket) => {
             return;
         }
         socket.leave(room);
+        console.log("USER IS LEAVING:", room);
         socket.to(room).emit("opponent-quit");
         console.log("Left room:", room);
     });
@@ -68,9 +69,8 @@ io.on("connection", (socket) => {
         console.log("USER DISCONENCTING FROM:", rooms);
         rooms.forEach((room) => {
             if (room && room !== socket.id) {
-                console.log("ROOM:", room);
+                console.log("USER IS LEAVING:", room);
                 socket.to(room).emit("opponent-quit");
-                console.log("Successfully broadcasted to", room);
             }
         });
 
