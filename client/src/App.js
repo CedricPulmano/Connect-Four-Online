@@ -7,11 +7,7 @@ import ConnectionRoom from "./pages/connectionRoom/ConnectionRoom";
 import BoardRoom from "./pages/boardRoom/BoardRoom";
 
 function App() {
-    // when 'receive-message' is emitted, call addText
-    socket.on("receive-message", (message) => {
-        addMessage(message);
-    });
-
+    /* MESSAGING */
     // keeps track of messages sent
     const [messages, setMessages] = useState([]);
 
@@ -20,6 +16,12 @@ function App() {
         setMessages([...messages, message]);
     };
 
+    // when 'receive-message' is emitted, call addText
+    socket.on("receive-message", (message) => {
+        addMessage(message);
+    });
+
+    /* ROOM */
     // keeps track of current room and if joined
     // - if room is not set, then the user has not tried to join a room
     // - if not joined and room is set, then the user tried to join the room, but the room was full
@@ -29,15 +31,22 @@ function App() {
 
     // indicates whether joining the room was a success or not
     socket.on("join-room-result", (success, room) => {
-        if (!success) {
-            setRoom(room);
-            setJoined(false);
-            return;
-        }
+        setJoined(success);
         setRoom(room);
-        setJoined(true);
     });
 
+    /* PLAYING */
+    // keeps track of whether or not the player is in a game, and if it is their turn
+    const [playing, setPlaying] = useState(false);
+    const [turn, setTurn] = useState(false);
+
+    // once room has two players, indicate that the clients are playing and determine the turn order
+    socket.on("start-game", (goingFirst) => {
+        setPlaying(true);
+        setTurn(goingFirst);
+    });
+
+    /* SERVER CONNECTION */
     // waits for socket connection to be established, only rendering main component once connected
     const [connected, setConnected] = useState(false);
 
@@ -73,10 +82,13 @@ function App() {
                     <Route
                         path="/"
                         element={
-                            <ConnectionRoom messages={messages} room={room} joined={joined} addMessage={addMessage} />
+                            <ConnectionRoom messages={messages} addMessage={addMessage} room={room} joined={joined} />
                         }
                     ></Route>
-                    <Route path="/board" element={<BoardRoom />}></Route>
+                    <Route
+                        path="/board"
+                        element={<BoardRoom room={room} joined={joined} playing={playing} turn={turn} />}
+                    ></Route>
                 </Routes>
             </BrowserRouter>
         </div>
