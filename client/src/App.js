@@ -46,7 +46,9 @@ function App() {
         setTurn(goingFirst);
     });
 
+    // when opponent leaves the room, declare user as the winner
     socket.on("opponent-quit", () => {
+        setPlaying(false);
         console.log(`${socket.id} WINS!`);
     });
 
