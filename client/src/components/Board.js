@@ -55,13 +55,14 @@ const Board = () => {
       console.log("ended because not playable");
       return;
     }
+
     // call addPiece()
     // if addPiece does not work, do not update the board and exit the function
     // if addPiece does work, update the board and continue with this function
     // !!! IMPORT MALCOLM's FUNCTIONS
     const addedPosition = addPiece(columnNumber);
     if (addedPosition === false) {
-      return;
+      return; // can possibly return a pop-up stating that the move is invalid
     }
 
     const [x, y, color, win] = addedPosition;
@@ -73,6 +74,9 @@ const Board = () => {
     // if game is not won, use Socket to display the updated Board to oponent and make playable = false
 
     if (win) {
+      // show pop-up for current user
+      // Person who makes move calls socket.emit(‘make-move’, position, color)
+      // Person who receives move calls socket.on(‘make-move’, (position, colour) => { function });
     } else {
       // Person who makes move calls socket.emit(‘make-move’, position, color)
       // Person who receives move calls socket.on(‘make-move’, (position, colour) => { function });
