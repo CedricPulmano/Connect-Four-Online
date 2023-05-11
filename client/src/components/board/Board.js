@@ -25,18 +25,19 @@ const Board = ({ room, joined, playing, turn }) => {
   });
 
   const [board, setBoard] = useState([
-    ["white", "white", "white", "white", "white", "white", "white"],
-    ["white", "white", "white", "white", "white", "white", "white"],
-    ["white", "white", "white", "white", "white", "white", "white"],
-    ["white", "white", "white", "white", "white", "white", "white"],
-    ["white", "white", "white", "white", "white", "white", "white"],
-    ["white", "white", "white", "white", "white", "white", "white"],
+    ["white", "white", "white", "white", "white", "white"],
+    ["white", "white", "white", "white", "white", "white"],
+    ["white", "white", "white", "white", "white", "white"],
+    ["white", "white", "white", "white", "white", "white"],
+    ["white", "white", "white", "white", "white", "white"],
+    ["white", "white", "white", "white", "white", "white"],
+    ["white", "white", "white", "white", "white", "white"],
   ]);
 
-  const openSlot = useRef([0, 0, 0, 0, 0, 0]);
+  const openSlot = useRef([0, 0, 0, 0, 0, 0, 0]);
   const playable = useRef(turn); // need to make playable initally true for one user and false for another
 
-  function createRow(columnArray) {
+  function createColumn(columnArray) {
     return (
       <>
         <Position pieceColor={columnArray[0]} />
@@ -45,7 +46,6 @@ const Board = ({ room, joined, playing, turn }) => {
         <Position pieceColor={columnArray[3]} />
         <Position pieceColor={columnArray[4]} />
         <Position pieceColor={columnArray[5]} />
-        <Position pieceColor={columnArray[6]} />
       </>
     );
   }
@@ -109,23 +109,26 @@ const Board = ({ room, joined, playing, turn }) => {
           : "Join a Room to start playing!"}
       </h3>
       <div className="board">
-        <div className="column-one column" onClick={() => updateBoard(0)}>
-          {createRow(board[0])}
+        <div className="column-zero column" onClick={() => updateBoard(0)}>
+          {createColumn(board[0])}
         </div>
-        <div className="column-two column" onClick={() => updateBoard(1)}>
-          {createRow(board[1])}
+        <div className="column-one column" onClick={() => updateBoard(1)}>
+          {createColumn(board[1])}
         </div>
-        <div className="column-three column" onClick={() => updateBoard(2)}>
-          {createRow(board[2])}
+        <div className="column-two column" onClick={() => updateBoard(2)}>
+          {createColumn(board[2])}
         </div>
-        <div className="column-four column" onClick={() => updateBoard(3)}>
-          {createRow(board[3])}
+        <div className="column-three column" onClick={() => updateBoard(3)}>
+          {createColumn(board[3])}
         </div>
-        <div className="column-five column" onClick={() => updateBoard(4)}>
-          {createRow(board[4])}
+        <div className="column-four column" onClick={() => updateBoard(4)}>
+          {createColumn(board[4])}
         </div>
-        <div className="column-six column" onClick={() => updateBoard(5)}>
-          {createRow(board[5])}
+        <div className="column-five column" onClick={() => updateBoard(5)}>
+          {createColumn(board[5])}
+        </div>
+        <div className="column-six column" onClick={() => updateBoard(6)}>
+          {createColumn(board[6])}
         </div>
       </div>
     </div>

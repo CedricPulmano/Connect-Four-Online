@@ -1,18 +1,17 @@
 .position-space {
-  height: 10vh;
-  width: 10vw;
+  height: 11.666vh;
+  width: 8.57142857vw;
   text-align: center;
-  line-height: 10vh;
   outline: solid;
   background-color: #4977eb;
 }
 
 .piece {
-  width: 45%;
+  width: 60%;
   height: 85%;
   border-radius: 50%;
-  margin-left: 26%;
-  margin-top: 1.8%;
+  margin-left: 20%;
+  margin-top: 5%;
   padding: 0px;
   border: solid;
   border-width: 0.4vw;
