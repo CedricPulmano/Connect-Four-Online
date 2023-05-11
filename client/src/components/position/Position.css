@@ -18,6 +18,7 @@
   border-width: 0.4vw;
   border-style: solid;
   border-color: #779bf7;
+  cursor: pointer;
 }
 
 /* .piece:hover {
