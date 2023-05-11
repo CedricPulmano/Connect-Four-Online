@@ -44,6 +44,7 @@ io.on("connection", (socket) => {
             return;
         }
         socket.leave(room);
+        console.log("USER IS LEAVING:", room);
         socket.to(room).emit("opponent-quit");
         console.log("Left room:", room);
     });
@@ -62,17 +63,14 @@ io.on("connection", (socket) => {
         socket.to(room).broadcast.emit("receive-move", (x, y, color, win));
     });
 
-    socket.on("disconnect", () => {
-        // rooms is a Map, where the keys are all the roomIDs that the disconnector is in
-        const rooms = socket.adapter.rooms;
-
-        console.log(rooms);
-        rooms.forEach((value, room) => {
-            if (room !== socket.id) {
-                console.log("ROOM:", room);
-                console.log("VALUE:", value);
-                // socket.to(room).broadcast.emit("opponent-quit");
-                // console.log("Successfully broadcasted to", room);
+    // when user disconnects, emit to anyone else in the room that they disconnected
+    socket.on("disconnecting", () => {
+        const rooms = socket.rooms;
+        console.log("USER DISCONENCTING FROM:", rooms);
+        rooms.forEach((room) => {
+            if (room && room !== socket.id) {
+                console.log("USER IS LEAVING:", room);
+                socket.to(room).emit("opponent-quit");
             }
         });
 
