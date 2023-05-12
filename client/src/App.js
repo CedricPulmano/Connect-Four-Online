@@ -99,7 +99,9 @@ function App() {
                     ></Route>
                     <Route
                         path="/board"
-                        element={<BoardRoom room={room} joined={joined} playing={playing} turn={turn} />}
+                        element={
+                            <BoardRoom room={room} joined={joined} playing={playing} turn={turn} setTurn={setTurn} />
+                        }
                     ></Route>
                 </Routes>
             </BrowserRouter>
