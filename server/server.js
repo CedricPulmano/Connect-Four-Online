@@ -60,7 +60,9 @@ io.on("connection", (socket) => {
 
     // updates player when opponent makes a move
     socket.on("send-move", (room, x, y, color, win) => {
-        socket.to(room).broadcast.emit("receive-move", (x, y, color, win));
+        // socket.to(room).broadcast.emit("receive-move", columnNumber);
+        socket.to(room).emit("receive-move", x, y, color, win);
+        console.log("sent move", room);
     });
 
     // when user disconnects, emit to anyone else in the room that they disconnected
