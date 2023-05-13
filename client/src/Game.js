@@ -1,4 +1,4 @@
-class Space {
+export class Space {
     constructor(colour /*: "red" | "yellow" | "empty"*/) {
         this.colour = colour;
     }
@@ -202,6 +202,19 @@ export class Game {
             console.log();
         }
     }
-}
 
-// let game = new Game();
+    getBoard() {
+        return this.board;
+    }
+
+    getBoardString() {
+        let stringBoard = [];
+        for (let i = 0; i < this.WIDTH; i++) {
+            stringBoard[i] = [];
+            for (let j = 0; j < this.HEIGHT; j++) {
+                stringBoard[i][j] = this.board[i][j].getColour();
+            }
+        }
+        return stringBoard;
+    }
+}

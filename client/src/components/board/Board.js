@@ -2,7 +2,7 @@ import Position from "../position/Position";
 import socket from "../../scripts/socketConnection";
 import { useState, useRef, useEffect } from "react";
 import "./Board.css";
-import { Game } from "../../Game";
+import { Game, Square } from "../../Game";
 
 // 2d array 6x7 matrix
 // use map function to render 6x7 Position components
@@ -15,6 +15,7 @@ const Board = ({ room, joined, playing, turn, setTurn }) => {
         reRenderBoard(x, y, color);
         updateOpenSlot(x);
         setTurn(true);
+        console.log("AFTER USER RECEIVED MOVE", game.current.getBoardString());
     });
 
     socket.on("game-lost", () => {
@@ -24,9 +25,7 @@ const Board = ({ room, joined, playing, turn, setTurn }) => {
     // DEBUGGING
     const renderedTimes = useRef(0);
     useEffect(() => {
-        console.log("rendered board");
         renderedTimes.current++;
-        console.log(renderedTimes.current);
     });
 
     const [board, setBoard] = useState([
@@ -97,10 +96,9 @@ const Board = ({ room, joined, playing, turn, setTurn }) => {
         const [x, y, color, win] = addedPosition;
         reRenderBoard(x, y, color);
         updateOpenSlot(x);
-
-        console.log("SEND:", color);
         socket.emit("send-move", room, x, y, color, win);
         setTurn(false);
+        console.log("AFTER USER MAKES MOVE:", game.current.getBoardString());
 
         // call checkWin()
         // if game is won, display a popup that states the player won and make Socket show a defeat screen to oponent

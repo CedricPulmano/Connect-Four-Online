@@ -67,7 +67,6 @@ io.on("connection", (socket) => {
         } else {
             socket.to(room).emit("receive-move", x, y, color, win);
         }
-        console.log("sent move", room);
     });
 
     // when user disconnects, emit to anyone else in the room that they disconnected
