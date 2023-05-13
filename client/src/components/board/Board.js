@@ -11,17 +11,20 @@ import { Game } from "../../Game";
 const Board = ({ room, joined, playing, turn, setTurn }) => {
     socket.on("receive-move", (x, y, color, win) => {
         console.log("Received move", x, y, color, win);
+        game.current.addPiece(x);
         reRenderBoard(x, y, color);
         updateOpenSlot(x);
         setTurn(true);
-        game.current.addPiece(x);
+    });
+
+    socket.on("game-lost", () => {
+        showStatus("lost");
     });
 
     // DEBUGGING
     const renderedTimes = useRef(0);
     useEffect(() => {
         console.log("rendered board");
-        console.log(board);
         renderedTimes.current++;
         console.log(renderedTimes.current);
     });
@@ -66,6 +69,14 @@ const Board = ({ room, joined, playing, turn, setTurn }) => {
         openSlot.current = changingOpenSlot;
     }
 
+    function showStatus(status) {
+        if (status === "won") {
+            console.log("YOU WON");
+        } else {
+            console.log("YOU LOST");
+        }
+    }
+
     function updateBoard(columnNumber) {
         // board must be currently playable
         if (!turn) {
@@ -84,8 +95,10 @@ const Board = ({ room, joined, playing, turn, setTurn }) => {
         }
 
         const [x, y, color, win] = addedPosition;
-        reRenderBoard(x, y, color); //
-        updateOpenSlot(x); //
+        reRenderBoard(x, y, color);
+        updateOpenSlot(x);
+
+        console.log("SEND:", color);
         socket.emit("send-move", room, x, y, color, win);
         setTurn(false);
 
@@ -94,9 +107,7 @@ const Board = ({ room, joined, playing, turn, setTurn }) => {
         // if game is not won, use Socket to display the updated Board to oponent and make playable = false
 
         if (win) {
-        } else {
-            // Person who makes move calls socket.emit(‘make-move’, position, color)
-            // Person who receives move calls socket.on(‘make-move’, (position, colour) => { function });
+            showStatus("win");
         }
     }
 

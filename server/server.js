@@ -61,7 +61,12 @@ io.on("connection", (socket) => {
     // updates player when opponent makes a move
     socket.on("send-move", (room, x, y, color, win) => {
         // socket.to(room).broadcast.emit("receive-move", columnNumber);
-        socket.to(room).emit("receive-move", x, y, color, win);
+        if (win) {
+            socket.to(room).emit("game-lost");
+            // makes an emit to "game-lost", socket.on("game-lost") will display pop-up with "YOU LOST" message by calling showStatus("lose");
+        } else {
+            socket.to(room).emit("receive-move", x, y, color, win);
+        }
         console.log("sent move", room);
     });
 
