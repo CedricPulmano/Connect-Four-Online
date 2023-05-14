@@ -1,6 +1,6 @@
 import Position from "../position/Position";
 import socket from "../../scripts/socketConnection";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import "./Board.css";
 import { Game } from "../../Game";
 
@@ -10,19 +10,18 @@ import { Game } from "../../Game";
 
 const Board = ({ room, joined, playing, turn, setTurn }) => {
     socket.off("receive-move").on("receive-move", (x, y, color, win) => {
-        console.log("Received move", x, y, color, win);
         reRenderBoard(x, y, color);
         updateOpenSlot(x);
         game.current.addPiece(x);
-        setTurn(true);
+
         if (win) {
-            displayWin("You Lost");
-            setTurn(false);
+            setMessage("YOU LOST");
+        } else {
+            setTurn(true);
         }
     });
 
     // DEBUGGING
-    /*
     const renderedTimes = useRef(0);
     useEffect(() => {
         console.log("rendered board");
@@ -30,7 +29,6 @@ const Board = ({ room, joined, playing, turn, setTurn }) => {
         renderedTimes.current++;
         console.log(renderedTimes.current);
     });
-    */
 
     const [board, setBoard] = useState([
         ["white", "white", "white", "white", "white", "white"],
@@ -44,6 +42,7 @@ const Board = ({ room, joined, playing, turn, setTurn }) => {
 
     const openSlot = useRef([5, 5, 5, 5, 5, 5, 5]);
     const game = useRef(new Game());
+    const [message, setMessage] = useState("");
 
     function createColumn(columnArray) {
         return (
@@ -73,32 +72,35 @@ const Board = ({ room, joined, playing, turn, setTurn }) => {
         openSlot.current = changingOpenSlot;
     }
 
-    function displayWin(message) {
-        console.log(message);
-    }
-
     function updateBoard(columnNumber) {
         // board must be currently playable
         if (!turn) {
             console.log("Not your turn, wait for opponent to make a move");
             return;
         }
-
         // call addPiece()
+        // if addPiece does not work, do not update the board and exit the function
+        // if addPiece does work, update the board and continue with this function
+        // !!! IMPORT MALCOLM's FUNCTIONS
+
+        // emit
         const addedPosition = game.current.addPiece(columnNumber);
         if (addedPosition === false) {
             return;
         }
 
-        // use information from addPiece to update states
         const [x, y, color, win] = addedPosition;
-        reRenderBoard(x, y, color);
-        updateOpenSlot(x);
-        setTurn(false);
+        reRenderBoard(x, y, color); //
+        updateOpenSlot(x); //
         socket.emit("send-move", room, x, y, color, win);
+        setTurn(false);
+
+        // call checkWin()
+        // if game is won, display a popup that states the player won and make Socket show a defeat screen to oponent
+        // if game is not won, use Socket to display the updated Board to oponent and make playable = false
 
         if (win) {
-            displayWin("You won!");
+            setMessage("YOU WON");
         }
     }
 
@@ -136,6 +138,7 @@ const Board = ({ room, joined, playing, turn, setTurn }) => {
                     {createColumn(board[6])}
                 </div>
             </div>
+            <h3 className="game-status">{message}</h3>
         </div>
     );
 };

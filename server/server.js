@@ -11,10 +11,6 @@ io.on("connection", (socket) => {
 
     // joins specific socket to given room if room is not full
     socket.on("join-room", (roomID, socketID) => {
-        if (roomID === "") {
-            return;
-        }
-
         const room = io.sockets.adapter.rooms.get(roomID);
 
         // room is full - do not let client join
@@ -64,12 +60,9 @@ io.on("connection", (socket) => {
 
     // updates player when opponent makes a move
     socket.on("send-move", (room, x, y, color, win) => {
-        if (win) {
-            socket.to(room).emit("game-lost");
-        } else {
-            console.log(`${color} SENT A MOVE TO ${room}`);
-            socket.to(room).emit("receive-move", x, y, color, win);
-        }
+        // socket.to(room).broadcast.emit("receive-move", columnNumber);
+        socket.to(room).emit("receive-move", x, y, color, win);
+        console.log("sent move", room);
     });
 
     // when user disconnects, emit to anyone else in the room that they disconnected
@@ -80,7 +73,6 @@ io.on("connection", (socket) => {
             if (room && room !== socket.id) {
                 console.log("USER IS LEAVING:", room);
                 socket.to(room).emit("opponent-quit");
-                socket.leave(room);
             }
         });
 
