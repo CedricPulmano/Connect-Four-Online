@@ -108,7 +108,7 @@ export class Game {
         break;
       }
     }
-    let j = locX - 1;
+    let j = locY - 1;
     while (j >= 0) {
       if (this.board[locX][j].getColour() === colour) {
         counter++;
