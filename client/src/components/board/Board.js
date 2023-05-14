@@ -10,12 +10,15 @@ import { Game } from "../../Game";
 
 const Board = ({ room, joined, playing, turn, setTurn }) => {
   socket.off("receive-move").on("receive-move", (x, y, color, win) => {
-    console.log("receive-move");
-    console.log("Received move", x, y, color, win);
     reRenderBoard(x, y, color);
     updateOpenSlot(x);
-    setTurn(true);
     game.current.addPiece(x);
+
+    if (win) {
+      setMessage("YOU LOST");
+    } else {
+      setTurn(true);
+    }
   });
 
   // DEBUGGING
@@ -39,6 +42,7 @@ const Board = ({ room, joined, playing, turn, setTurn }) => {
 
   const openSlot = useRef([5, 5, 5, 5, 5, 5, 5]);
   const game = useRef(new Game());
+  const [message, setMessage] = useState("");
 
   function createColumn(columnArray) {
     return (
@@ -96,9 +100,7 @@ const Board = ({ room, joined, playing, turn, setTurn }) => {
     // if game is not won, use Socket to display the updated Board to oponent and make playable = false
 
     if (win) {
-    } else {
-      // Person who makes move calls socket.emit(‘make-move’, position, color)
-      // Person who receives move calls socket.on(‘make-move’, (position, colour) => { function });
+      setMessage("YOU WON");
     }
   }
 
@@ -136,6 +138,7 @@ const Board = ({ room, joined, playing, turn, setTurn }) => {
           {createColumn(board[6])}
         </div>
       </div>
+      <h3 className="game-status">{message}</h3>
     </div>
   );
 };
