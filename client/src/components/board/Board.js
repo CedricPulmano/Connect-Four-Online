@@ -1,6 +1,6 @@
 import Position from "../position/Position";
 import socket from "../../scripts/socketConnection";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import "./Board.css";
 import { Game, Square } from "../../Game";
 
@@ -10,22 +10,15 @@ import { Game, Square } from "../../Game";
 
 const Board = ({ room, joined, playing, turn, setTurn }) => {
     socket.on("receive-move", (x, y, color, win) => {
-        console.log("Received move", x, y, color, win);
         game.current.addPiece(x);
         reRenderBoard(x, y, color);
         updateOpenSlot(x);
         setTurn(true);
-        console.log("AFTER USER RECEIVED MOVE", game.current.getBoardString());
+        console.log(`User received move from ${room} at ${x}, ${y}`);
     });
 
     socket.on("game-lost", () => {
         showStatus("lost");
-    });
-
-    // DEBUGGING
-    const renderedTimes = useRef(0);
-    useEffect(() => {
-        renderedTimes.current++;
     });
 
     const [board, setBoard] = useState([
@@ -82,12 +75,11 @@ const Board = ({ room, joined, playing, turn, setTurn }) => {
             console.log("Not your turn, wait for opponent to make a move");
             return;
         }
-        // call addPiece()
-        // if addPiece does not work, do not update the board and exit the function
-        // if addPiece does work, update the board and continue with this function
-        // !!! IMPORT MALCOLM's FUNCTIONS
 
-        // emit
+        setTurn(false);
+
+        // if it does not work, do not update the board and exit the function
+        // if addPiece does work, update the board and continue with this function
         const addedPosition = game.current.addPiece(columnNumber);
         if (addedPosition === false) {
             return;
@@ -97,8 +89,7 @@ const Board = ({ room, joined, playing, turn, setTurn }) => {
         reRenderBoard(x, y, color);
         updateOpenSlot(x);
         socket.emit("send-move", room, x, y, color, win);
-        setTurn(false);
-        console.log("AFTER USER MAKES MOVE:", game.current.getBoardString());
+        console.log(`${color} made a move at ${x}, ${y}`);
 
         // call checkWin()
         // if game is won, display a popup that states the player won and make Socket show a defeat screen to oponent
