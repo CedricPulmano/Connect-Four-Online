@@ -1,27 +1,38 @@
 import Position from "../position/Position";
 import socket from "../../scripts/socketConnection";
-import { useState, useRef, useEffect } from "react";
 import "./Board.css";
-import { Game } from "../../Game";
 
 // 2d array 6x7 matrix
 // use map function to render 6x7 Position components
 // each array is a board column
 
-const Board = ({ room, joined, playing, turn, setTurn }) => {
+const Board = ({
+    room,
+    joined,
+    playing,
+    turn,
+    setTurn,
+    board,
+    setBoard,
+    openSlot,
+    game,
+    winnerMessage,
+    setWinnerMessage,
+}) => {
     socket.off("receive-move").on("receive-move", (x, y, color, win) => {
         reRenderBoard(x, y, color);
         updateOpenSlot(x);
         game.current.addPiece(x);
 
         if (win) {
-            setMessage("YOU LOST");
+            setWinnerMessage("YOU LOST");
         } else {
             setTurn(true);
         }
     });
 
     // DEBUGGING
+    /*
     const renderedTimes = useRef(0);
     useEffect(() => {
         console.log("rendered board");
@@ -29,20 +40,7 @@ const Board = ({ room, joined, playing, turn, setTurn }) => {
         renderedTimes.current++;
         console.log(renderedTimes.current);
     });
-
-    const [board, setBoard] = useState([
-        ["white", "white", "white", "white", "white", "white"],
-        ["white", "white", "white", "white", "white", "white"],
-        ["white", "white", "white", "white", "white", "white"],
-        ["white", "white", "white", "white", "white", "white"],
-        ["white", "white", "white", "white", "white", "white"],
-        ["white", "white", "white", "white", "white", "white"],
-        ["white", "white", "white", "white", "white", "white"],
-    ]);
-
-    const openSlot = useRef([5, 5, 5, 5, 5, 5, 5]);
-    const game = useRef(new Game());
-    const [message, setMessage] = useState("");
+    */
 
     function createColumn(columnArray) {
         return (
@@ -100,20 +98,22 @@ const Board = ({ room, joined, playing, turn, setTurn }) => {
         // if game is not won, use Socket to display the updated Board to oponent and make playable = false
 
         if (win) {
-            setMessage("YOU WON");
+            setWinnerMessage("YOU WON");
         }
     }
 
     return (
         <div className="board-container">
             <h3 className="turn-indicator">
-                {joined
-                    ? playing
-                        ? turn
-                            ? `Playing in Room ${room}. Your Turn.`
-                            : `Playing in Room ${room}. Opponent's Turn.`
-                        : `Joined Room ${room}. Waiting for an opponent...`
-                    : "Join a Room to start playing!"}
+                {winnerMessage === ""
+                    ? joined
+                        ? playing
+                            ? turn
+                                ? `Playing in Room ${room}. Your Turn.`
+                                : `Playing in Room ${room}. Opponent's Turn.`
+                            : `Joined Room ${room}. Waiting for an opponent...`
+                        : "Join a Room to start playing!"
+                    : winnerMessage}
             </h3>
             <div className="board">
                 <div className="column-zero column" onClick={() => updateBoard(0)}>
@@ -138,7 +138,6 @@ const Board = ({ room, joined, playing, turn, setTurn }) => {
                     {createColumn(board[6])}
                 </div>
             </div>
-            <h3 className="game-status">{message}</h3>
         </div>
     );
 };

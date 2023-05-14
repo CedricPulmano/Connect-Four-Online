@@ -1,10 +1,11 @@
 import "./App.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import socket from "./scripts/socketConnection";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NavigationBar from "./components/navigationBar/NavigationBar";
 import ConnectionRoom from "./pages/connectionRoom/ConnectionRoom";
 import BoardRoom from "./pages/boardRoom/BoardRoom";
+import { Game } from "./Game";
 
 function App() {
     /* MESSAGING */
@@ -45,6 +46,20 @@ function App() {
         setPlaying(true);
         setTurn(goingFirst);
     });
+
+    const [board, setBoard] = useState([
+        ["white", "white", "white", "white", "white", "white"],
+        ["white", "white", "white", "white", "white", "white"],
+        ["white", "white", "white", "white", "white", "white"],
+        ["white", "white", "white", "white", "white", "white"],
+        ["white", "white", "white", "white", "white", "white"],
+        ["white", "white", "white", "white", "white", "white"],
+        ["white", "white", "white", "white", "white", "white"],
+    ]);
+
+    const openSlot = useRef([5, 5, 5, 5, 5, 5, 5]);
+    const game = useRef(new Game());
+    const [winnerMessage, setWinnerMessage] = useState("");
 
     // when opponent leaves the room, declare user as the winner
     socket.on("opponent-quit", () => {
@@ -100,7 +115,19 @@ function App() {
                     <Route
                         path="/board"
                         element={
-                            <BoardRoom room={room} joined={joined} playing={playing} turn={turn} setTurn={setTurn} />
+                            <BoardRoom
+                                room={room}
+                                joined={joined}
+                                playing={playing}
+                                turn={turn}
+                                setTurn={setTurn}
+                                board={board}
+                                setBoard={setBoard}
+                                openSlot={openSlot}
+                                game={game}
+                                winnerMessage={winnerMessage}
+                                setWinnerMessage={setWinnerMessage}
+                            />
                         }
                     ></Route>
                 </Routes>
