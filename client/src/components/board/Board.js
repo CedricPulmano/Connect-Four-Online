@@ -9,7 +9,8 @@ import { Game } from "../../Game";
 // each array is a board column
 
 const Board = ({ room, joined, playing, turn, setTurn }) => {
-  socket.on("receive-move", (x, y, color, win) => {
+  socket.off("receive-move").on("receive-move", (x, y, color, win) => {
+    console.log("receive-move");
     console.log("Received move", x, y, color, win);
     reRenderBoard(x, y, color);
     updateOpenSlot(x);
@@ -56,7 +57,7 @@ const Board = ({ room, joined, playing, turn, setTurn }) => {
   // !!! why is value of state and ref updated before the print statement???? not sure, but
   function reRenderBoard(x, y, color) {
     let changingBoard = board.slice();
-    let newY = openSlot.current[y];
+    let newY = openSlot.current[x];
     changingBoard[x][newY] = color;
     setBoard(changingBoard);
   }
