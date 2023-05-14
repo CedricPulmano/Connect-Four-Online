@@ -1,4 +1,4 @@
-export class Space {
+class Space {
     constructor(colour /*: "red" | "yellow" | "empty"*/) {
         this.colour = colour;
     }
@@ -47,6 +47,7 @@ export class Game {
     addPiece(
         column /*: number, // colour: "red" | "yellow" */
     ) /*: [number, number, "red" | "yellow", boolean] false */ {
+        console.log("add piece");
         if (this.isFull(column)) {
             return false;
         } else {
@@ -103,7 +104,7 @@ export class Game {
                 break;
             }
         }
-        let j = locX - 1;
+        let j = locY - 1;
         while (j >= 0) {
             if (this.board[locX][j].getColour() === colour) {
                 counter++;
@@ -201,20 +202,5 @@ export class Game {
             }
             console.log();
         }
-    }
-
-    getBoard() {
-        return this.board;
-    }
-
-    getBoardString() {
-        let stringBoard = [];
-        for (let i = 0; i < this.WIDTH; i++) {
-            stringBoard[i] = [];
-            for (let j = 0; j < this.HEIGHT; j++) {
-                stringBoard[i][j] = this.board[i][j].getColour();
-            }
-        }
-        return stringBoard;
     }
 }
