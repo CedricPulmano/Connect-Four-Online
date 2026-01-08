@@ -1,146 +1,145 @@
 import Position from "../position/Position";
 import socket from "../../scripts/socketConnection";
-import { useState, useRef, useEffect } from "react";
 import "./Board.css";
-import { Game } from "../../Game";
 
 // 2d array 6x7 matrix
 // use map function to render 6x7 Position components
 // each array is a board column
 
-const Board = ({ room, joined, playing, turn, setTurn }) => {
-  socket.off("receive-move").on("receive-move", (x, y, color, win) => {
-    reRenderBoard(x, y, color);
-    updateOpenSlot(x);
-    game.current.addPiece(x);
+const Board = ({
+    room,
+    joined,
+    playing,
+    turn,
+    setTurn,
+    board,
+    setBoard,
+    openSlot,
+    game,
+    winnerMessage,
+    setWinnerMessage,
+}) => {
+    socket.off("receive-move").on("receive-move", (x, y, color, win) => {
+        reRenderBoard(x, y, color);
+        updateOpenSlot(x);
+        game.current.addPiece(x);
 
-    if (win) {
-      setMessage("YOU LOST");
-    } else {
-      setTurn(true);
+        if (win) {
+            setWinnerMessage("YOU LOST");
+        } else {
+            setTurn(true);
+        }
+    });
+
+    // DEBUGGING
+    /*
+    const renderedTimes = useRef(0);
+    useEffect(() => {
+        console.log("rendered board");
+        console.log(board);
+        renderedTimes.current++;
+        console.log(renderedTimes.current);
+    });
+    */
+
+    function createColumn(columnArray) {
+        return (
+            <>
+                <Position pieceColor={columnArray[0]} />
+                <Position pieceColor={columnArray[1]} />
+                <Position pieceColor={columnArray[2]} />
+                <Position pieceColor={columnArray[3]} />
+                <Position pieceColor={columnArray[4]} />
+                <Position pieceColor={columnArray[5]} />
+            </>
+        );
     }
-  });
 
-  // DEBUGGING
-  const renderedTimes = useRef(0);
-  useEffect(() => {
-    console.log("rendered board");
-    console.log(board);
-    renderedTimes.current++;
-    console.log(renderedTimes.current);
-  });
+    // value of array is address for state, so using a new array re-renders but changing value of original array does not
+    // !!! why is value of state and ref updated before the print statement???? not sure, but
+    function reRenderBoard(x, y, color) {
+        let changingBoard = board.slice();
+        let newY = openSlot.current[x];
+        changingBoard[x][newY] = color;
+        setBoard(changingBoard);
+    }
 
-  const [board, setBoard] = useState([
-    ["white", "white", "white", "white", "white", "white"],
-    ["white", "white", "white", "white", "white", "white"],
-    ["white", "white", "white", "white", "white", "white"],
-    ["white", "white", "white", "white", "white", "white"],
-    ["white", "white", "white", "white", "white", "white"],
-    ["white", "white", "white", "white", "white", "white"],
-    ["white", "white", "white", "white", "white", "white"],
-  ]);
+    function updateOpenSlot(columnNumber) {
+        let changingOpenSlot = openSlot.current;
+        changingOpenSlot[columnNumber]--;
+        openSlot.current = changingOpenSlot;
+    }
 
-  const openSlot = useRef([5, 5, 5, 5, 5, 5, 5]);
-  const game = useRef(new Game());
-  const [message, setMessage] = useState("");
+    function updateBoard(columnNumber) {
+        // board must be currently playable
+        if (!turn) {
+            console.log("Not your turn, wait for opponent to make a move");
+            return;
+        }
+        // call addPiece()
+        // if addPiece does not work, do not update the board and exit the function
+        // if addPiece does work, update the board and continue with this function
+        // !!! IMPORT MALCOLM's FUNCTIONS
 
-  function createColumn(columnArray) {
+        // emit
+        const addedPosition = game.current.addPiece(columnNumber);
+        if (addedPosition === false) {
+            return;
+        }
+
+        const [x, y, color, win] = addedPosition;
+        reRenderBoard(x, y, color); //
+        updateOpenSlot(x); //
+        socket.emit("send-move", room, x, y, color, win);
+        setTurn(false);
+
+        // call checkWin()
+        // if game is won, display a popup that states the player won and make Socket show a defeat screen to oponent
+        // if game is not won, use Socket to display the updated Board to oponent and make playable = false
+
+        if (win) {
+            setWinnerMessage("YOU WON");
+        }
+    }
+
     return (
-      <>
-        <Position pieceColor={columnArray[0]} />
-        <Position pieceColor={columnArray[1]} />
-        <Position pieceColor={columnArray[2]} />
-        <Position pieceColor={columnArray[3]} />
-        <Position pieceColor={columnArray[4]} />
-        <Position pieceColor={columnArray[5]} />
-      </>
+        <div className="board-container">
+            <h3 className="turn-indicator">
+                {winnerMessage === ""
+                    ? joined
+                        ? playing
+                            ? turn
+                                ? `Playing in Room ${room}. Your Turn.`
+                                : `Playing in Room ${room}. Opponent's Turn.`
+                            : `Joined Room ${room}. Waiting for an opponent...`
+                        : "Join a Room to start playing!"
+                    : winnerMessage}
+            </h3>
+            <div className="board">
+                <div className="column-zero column" onClick={() => updateBoard(0)}>
+                    {createColumn(board[0])}
+                </div>
+                <div className="column-one column" onClick={() => updateBoard(1)}>
+                    {createColumn(board[1])}
+                </div>
+                <div className="column-two column" onClick={() => updateBoard(2)}>
+                    {createColumn(board[2])}
+                </div>
+                <div className="column-three column" onClick={() => updateBoard(3)}>
+                    {createColumn(board[3])}
+                </div>
+                <div className="column-four column" onClick={() => updateBoard(4)}>
+                    {createColumn(board[4])}
+                </div>
+                <div className="column-five column" onClick={() => updateBoard(5)}>
+                    {createColumn(board[5])}
+                </div>
+                <div className="column-six column" onClick={() => updateBoard(6)}>
+                    {createColumn(board[6])}
+                </div>
+            </div>
+        </div>
     );
-  }
-
-  // value of array is address for state, so using a new array re-renders but changing value of original array does not
-  // !!! why is value of state and ref updated before the print statement???? not sure, but
-  function reRenderBoard(x, y, color) {
-    let changingBoard = board.slice();
-    let newY = openSlot.current[x];
-    changingBoard[x][newY] = color;
-    setBoard(changingBoard);
-  }
-
-  function updateOpenSlot(columnNumber) {
-    let changingOpenSlot = openSlot.current;
-    changingOpenSlot[columnNumber]--;
-    openSlot.current = changingOpenSlot;
-  }
-
-  function updateBoard(columnNumber) {
-    // board must be currently playable
-    if (!turn) {
-      console.log("Not your turn, wait for opponent to make a move");
-      return;
-    }
-    // call addPiece()
-    // if addPiece does not work, do not update the board and exit the function
-    // if addPiece does work, update the board and continue with this function
-    // !!! IMPORT MALCOLM's FUNCTIONS
-
-    // emit
-    const addedPosition = game.current.addPiece(columnNumber);
-    if (addedPosition === false) {
-      return;
-    }
-
-    const [x, y, color, win] = addedPosition;
-    reRenderBoard(x, y, color); //
-    updateOpenSlot(x); //
-    socket.emit("send-move", room, x, y, color, win);
-    setTurn(false);
-
-    // call checkWin()
-    // if game is won, display a popup that states the player won and make Socket show a defeat screen to oponent
-    // if game is not won, use Socket to display the updated Board to oponent and make playable = false
-
-    if (win) {
-      setMessage("YOU WON");
-    }
-  }
-
-  return (
-    <div className="board-container">
-      <h3 className="turn-indicator">
-        {joined
-          ? playing
-            ? turn
-              ? `Playing in Room ${room}. Your Turn.`
-              : `Playing in Room ${room}. Opponent's Turn.`
-            : `Joined Room ${room}. Waiting for an opponent...`
-          : "Join a Room to start playing!"}
-      </h3>
-      <div className="board">
-        <div className="column-zero column" onClick={() => updateBoard(0)}>
-          {createColumn(board[0])}
-        </div>
-        <div className="column-one column" onClick={() => updateBoard(1)}>
-          {createColumn(board[1])}
-        </div>
-        <div className="column-two column" onClick={() => updateBoard(2)}>
-          {createColumn(board[2])}
-        </div>
-        <div className="column-three column" onClick={() => updateBoard(3)}>
-          {createColumn(board[3])}
-        </div>
-        <div className="column-four column" onClick={() => updateBoard(4)}>
-          {createColumn(board[4])}
-        </div>
-        <div className="column-five column" onClick={() => updateBoard(5)}>
-          {createColumn(board[5])}
-        </div>
-        <div className="column-six column" onClick={() => updateBoard(6)}>
-          {createColumn(board[6])}
-        </div>
-      </div>
-      <h3 className="game-status">{message}</h3>
-    </div>
-  );
 };
 
 export default Board;
